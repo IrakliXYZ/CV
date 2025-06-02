@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Formatter</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>CV Formatter</h1>
+            <p class="subtitle">Transform your CV with AI</p>
+        </header>
+        
+        <main>
+            <div class="upload-card">
+                <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data" id="cv-form">
+                    <div class="file-upload-container">
+                        <label for="cv_file" class="file-upload-label">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            <span>Upload CV (PDF)</span>
+                            <small class="file-instruction">Only 1 file allowed, max 5MB</small>
+                        </label>
+                        <input type="file" class="file-upload-input" id="cv_file" name="cv_file" accept=".pdf" required>
+                        <p class="file-name" id="file-name">No file selected</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cv_format">CV Format</label>
+                        <select id="cv_format" name="cv_format" required class="format-select">
+                            <option value="world_bank">World Bank</option>
+                            <option value="adb">ADB (Asian Development Bank)</option>
+                            <option value="ebrd">EBRD (European Bank for Reconstruction and Development)</option>
+                            <option value="undp">UNDP (United Nations Development Programme)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="proposed_position">Proposed Position</label>
+                        <input type="text" id="proposed_position" name="proposed_position" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="detailed_tasks">Detailed Tasks (comma-separated)</label>
+                        <textarea id="detailed_tasks" name="detailed_tasks" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="world_bank_experience">World Bank Experience</label>
+                        <textarea id="world_bank_experience" name="world_bank_experience" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-button" id="submit-btn">
+                        <span class="loading-spinner d-none" id="loading-spinner"></span>
+                        <span id="btn-text">Process CV</span>
+                    </button>
+                </form>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Powered by ACT Innovation Department</p>
+        </footer>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>

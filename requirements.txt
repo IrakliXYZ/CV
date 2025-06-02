@@ -1,0 +1,7 @@
+flask==3.0.2
+flask-session==0.8.0
+werkzeug==3.0.1
+anthropic==0.18.1
+PyPDF2==3.0.1
+python-dotenv==1.0.1
+gunicorn==21.2.0

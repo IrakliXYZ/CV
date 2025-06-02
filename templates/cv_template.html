@@ -1,0 +1,249 @@
+<!-- templates/cv_template.html -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>World Bank CV - {{ name }}</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.5;
+        margin: 30px;
+        color: #333;
+    }
+    .section-item {
+        margin-bottom: 10px;
+    }
+    .section-title {
+        font-weight: bold;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    .education-table th, .education-table td {
+        padding: 8px;
+    }
+    .indented-list {
+        margin-left: 20px;
+        padding-left: 0;
+    }
+    .employment-entry {
+        margin-bottom: 20px;
+    }
+    .employment-entry:last-child {
+        margin-bottom: 0;
+    }
+    .tasks-experience-table {
+        table-layout: fixed;
+    }
+    .tasks-col {
+        width: 30%;
+        vertical-align: top;
+    }
+    .exp-col {
+        width: 70%;
+        vertical-align: top;
+    }
+    .experience-item {
+        margin-bottom: 15px;
+    }
+    .experience-item:last-child {
+        margin-bottom: 0;
+    }
+    .text-justify {
+        text-align: justify;
+    }
+    .text-center {
+        text-align: center;
+    }
+    .small-spacer-bottom {
+        margin-bottom: 10px;
+    }
+    .signature-area {
+        margin-top: 40px;
+        display: flex;
+        justify-content: space-between;
+    }
+    .signature-line {
+        display: inline-block;
+        width: 200px;
+        border-bottom: 1px solid #000;
+        margin-right: 20px;
+    }
+    .signature-date {
+        display: inline-block;
+    }
+    .signature-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.9em;
+    }
+    .font-helvetica-small {
+        font-family: Helvetica, Arial, sans-serif;
+        font-size: 0.9em;
+    }
+</style>
+</head>
+<body>
+
+    <p class="section-item"><b>1. Name of Staff:</b> {{ name }}</p>
+    <p class="section-item"><b>2. Proposed Position:</b> {{ proposed_position }}</p>
+    <p class="section-item"><b>3. Employer:</b> {{ current_employer }}</p>
+    <p><b>4. Date of Birth:</b> {{ dob }}     <b>Nationality: </b>{{ nationality }}</p>
+
+    <p class="section-title"><b>5. Education</b></p>
+    <table class="education-table">
+        <thead>
+            <tr>
+                <th>School, college and/or University Attended</th>
+                <th>Degree/certificate or other specialized education obtained</th>
+                <th>Date Obtained</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if education %}
+                {% for edu in education %}
+                <tr>
+                    <td>{{ edu.institution }}</td>
+                    <td>{{ edu.degree }}</td>
+                    <td>{{ edu.date }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="3">No education information provided</td></tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <p class="section-item"><b>6. Professional Certification or Membership in Professional Associations:</b> {{ professional_memberships }}</p>
+    <p class="section-item"><b>7. Other Relevant Training:</b> {{ other_training }}</p>
+
+    <p class="section-title"><b>8. Countries of Work Experience</b></p>
+    {% if countries %}
+        <ul class="indented-list">
+            {% for country in countries %}
+                <li>{{ country }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No countries information provided</p>
+    {% endif %}
+
+    <p class="section-title"><b>9. Languages</b></p>
+    {% if languages %}
+        <ul class="indented-list text-justify">
+            {% for lang in languages %}
+                {% if lang is mapping %}
+                    <li>{{ lang.language }} {% if lang.proficiency %}({{ lang.proficiency }}){% endif %}</li>
+                {% else %}
+                    <li>{{ lang }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No language information provided</p>
+    {% endif %}
+
+    <p class="section-title"><b>10. Employment Record</b></p>
+    {% if employment %}
+        {% for emp in employment %}
+            <div class="employment-entry">
+                <p><b>From:</b> {{ emp.from }} <b>To:</b> {{ emp.to }}</p>
+                <p><b>Employer:</b> {{ emp.employer }}</p>
+                <p><b>Positions held:</b> {{ emp.positions }}</p>
+            </div>
+            {% if not loop.last %}<hr>{% endif %}
+        {% endfor %}
+    {% else %}
+        <p>No employment information provided</p>
+    {% endif %}
+
+    <table class="tasks-experience-table">
+      <thead>
+        <tr>
+            <th class="tasks-col">11. Detailed Tasks Assigned</th>
+            <th class="exp-col">12. Work Undertaken that Best Illustrates Capability to Handle the Tasks Assigned</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td class="tasks-col" rowspan="{{ experience|length if experience else 1 }}">
+                  {% if tasks %}
+                      <ul class="indented-list">
+                          {% for task in tasks %}
+                              <li class="font-helvetica-small">{{ task }}</li>
+                          {% endfor %}
+                      </ul>
+                  {% else %}
+                      <p>No tasks information provided</p>
+                  {% endif %}
+              </td>
+              <td class="exp-col">
+                  {% if experience %}
+                      {% for exp in experience %}
+                          {% if loop.index == 1 %}
+                              <div class="experience-item">
+                                  <p><b>Name of assignment or project:</b> {{ exp.project_name }}</p>
+                                  <p><b>Year:</b> {{ exp.year }}</p>
+                                  <p><b>Location:</b> {{ exp.location }}</p>
+                                  <p><b>Client:</b> {{ exp.client }}</p>
+                                  <p><b>Positions held:</b> {{ exp.position_held }}</p>
+                                  <p><b>Activities performed:</b> {{ exp.activities }}</p>
+                              </div>
+                          {% endif %}
+                      {% endfor %}
+                  {% else %}
+                      <p>No experience information provided</p>
+                  {% endif %}
+              </td>
+          </tr>
+          {% if experience and experience|length > 1 %}
+              {% for exp in experience[1:] %}
+                  <tr>
+                      <td class="exp-col">
+                          <div class="experience-item">
+                              <p><b>Name of assignment or project:</b> {{ exp.project_name }}</p>
+                              <p><b>Year:</b> {{ exp.year }}</p>
+                              <p><b>Location:</b> {{ exp.location }}</p>
+                              <p><b>Client:</b> {{ exp.client }}</p>
+                              <p><b>Positions held:</b> {{ exp.position_held }}</p>
+                              <p><b>Activities performed:</b> {{ exp.activities }}</p>
+                          </div>
+                      </td>
+                  </tr>
+              {% endfor %}
+          {% endif %}
+      </tbody>
+    </table>
+
+    <p class="section-title">13. World Bank Group Experience</p>
+    <p class="small-spacer-bottom">Do you currently or have you ever worked for the World Bank Group including any of the following types of appointments: Regular, Term, ETC, ETT, STC, STT, JPA, or JPO? If yes, please provide details, including start/end dates of appointment.</p>
+    <p class="section-item"><b>{{ world_bank_experience_details }}</b></p>
+
+    <p class="section-title text-center">Certification</p>
+    <p class="text-justify small-spacer-bottom">I certify that (1) to the best of my knowledge and belief, this CV correctly describes me, my qualifications, and my experience; (2) that I am available for the assignment for which I am proposed; and (3) that I am proposed only by one Offeror and under one proposal.</p>
+    <p class="text-justify small-spacer-bottom">I understand that any wilful misstatement or misrepresentation herein may lead to my disqualification or removal from the selected team undertaking the assignment.</p>
+
+    <div class="signature-area">
+        <p><span class="signature-line"> </span> <span class="signature-date">Date: {{ todays_date }}</span></p>
+        <p class="signature-label">
+            <span><i>[Signature of staff member or authorized representative of the staff]</i></span>
+            <span><i>Day/Month/Year</i></span>
+        </p>
+    </div>
+
+</body>
+</html>
+</html>
